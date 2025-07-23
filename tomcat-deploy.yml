@@ -1,0 +1,39 @@
+- name: Install Apache Tomcat
+  hosts: localhost
+  become: yes
+
+  tasks:
+    - name: Install Java
+      apt:
+        name: default-jdk
+        state: present
+        update_cache: yes
+
+    - name: Create tomcat user
+      user:
+        name: tomcat
+        shell: /bin/false
+
+    - name: Download Tomcat
+      get_url:
+        url: https://downloads.apache.org/tomcat/tomcat-9/v9.0.85/bin/apache-tomcat-9.0.85.tar.gz
+        dest: /tmp/apache-tomcat.tar.gz
+
+    - name: Extract Tomcat
+      unarchive:
+        src: /tmp/apache-tomcat.tar.gz
+        dest: /opt/
+        remote_src: yes
+
+    - name: Rename folder
+      command: mv /opt/apache-tomcat-9.0.85 /opt/tomcat
+
+    - name: Change ownership
+      file:
+        path: /opt/tomcat
+        owner: tomcat
+        group: tomcat
+        recurse: yes
+
+    - name: Start Tomcat
+      shell: nohup /opt/tomcat/bin/startup.sh &
