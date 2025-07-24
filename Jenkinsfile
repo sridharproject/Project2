@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Clone Repo') {
             steps {
-                git credentialsId: 'GITHUB_CRED', url: 'https://github.com/your/repo.git', branch: 'main'
+                git credentialsId: 'GITHUB_CRED', url: 'https://github.com/sridharproject/Project2.git', branch: 'main'
             }
         }
 
